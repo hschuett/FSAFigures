@@ -15,7 +15,7 @@ gen_investment_life <- function(start_year,
                                 investment_amount = 100) {
   tibble(
     t = 1:n_years,
-    Year = start_year + t,
+    Year = start_year + t - 1,
     BV = investment_amount - t * (investment_amount / useful_life),
     BV2 = investment_amount - (t * (investment_amount / 5)),
     Depreciation = rep((investment_amount / useful_life), times=n_years),
@@ -48,20 +48,20 @@ company_financials <-
 
 
 
-y# Plotting ----------------------------------------------------------------
+# Plotting ----------------------------------------------------------------
 bv_labels <- seq(0, 500, 100)
 is_labels <- seq(0, 100, 25)
 
 p1 <-
   investments %>%
   ggplot(aes(x=Year, y=BV, group=SYear)) +
-  annotate("rect", xmin=2000, xmax=2011,
+  annotate("rect", xmin=1998.5, xmax=2010.5,
            ymin=0, ymax=100,
            fill=fig_colors['accent1'],
-           alpha = .2) +
+           alpha = .3) +
   geom_line(color = fig_colors["main2"]) +
   labs(x=NULL, y=NULL,
-       title="Economic book value of each investment vintage",
+       title="(1) End-of-year economic book value of each investment vintage (1990-2010)",
        subtitle='Start of each year $100 investment. Useful life of 10 years') +
   scale_y_continuous(breaks=is_labels,
                      labels=is_labels,
@@ -71,13 +71,13 @@ p1 <-
 p2 <-
   company_financials %>%
   ggplot(aes(x=Year, y=NoBV)) +
-  annotate("rect", xmin=2000, xmax=2011,
+  annotate("rect", xmin=1998.5, xmax=2010.5,
            ymin=0, ymax=500,
            fill=fig_colors['accent1'],
-           alpha = .2) +
+           alpha = .3) +
   geom_col(fill=fig_colors['main2']) +
   labs(x=NULL, y=NULL,
-       title='Scenario A: Direct expensing',
+       title='(2) Scenario A: Direct expensing',
        subtitle="Balance Sheet: Accounting book value") +
   scale_y_continuous(breaks=bv_labels,
                      labels=bv_labels,
@@ -87,10 +87,10 @@ p2 <-
 p3 <-
   company_financials %>%
   ggplot(aes(x=Year, y=CapEx)) +
-  annotate("rect", xmin=2000, xmax=2011,
+  annotate("rect", xmin=1998.5, xmax=2010.5,
            ymin=0, ymax=110,
            fill=fig_colors['accent1'],
-           alpha = .2) +
+           alpha = .3) +
   geom_col(fill=fig_colors['main2'])+
   labs(x=NULL, y=NULL, title='', subtitle="Income Statement: Investment expense") +
   scale_y_continuous(breaks=is_labels,
@@ -101,13 +101,13 @@ p3 <-
 p4 <-
   company_financials %>%
   ggplot(aes(x=Year, y=SumBV)) +
-  annotate("rect", xmin=2000, xmax=2011,
+  annotate("rect", xmin=1998.5, xmax=2010.5,
            ymin=0, ymax=500,
            fill=fig_colors['accent1'],
-           alpha = .2) +
+           alpha = .3) +
   geom_col(fill=fig_colors['main2']) +
   labs(x=NULL, y=NULL,
-       title='Scenario B: Capitalizing investments',
+       title='(3) Scenario B: Capitalizing investments',
        subtitle="Balance Sheet: Accounting book value") +
   scale_y_continuous(breaks=bv_labels,
                      labels=bv_labels,
@@ -117,10 +117,10 @@ p4 <-
 p5 <-
   company_financials %>%
   ggplot(aes(x=Year, y=SumDep)) +
-  annotate("rect", xmin=2000, xmax=2011,
+  annotate("rect", xmin=1998.5, xmax=2010.5,
            ymin=0, ymax=110,
            fill=fig_colors['accent1'],
-           alpha = .2) +
+           alpha = .3) +
   geom_col(fill=fig_colors['main2'])+
   labs(x=NULL, y=NULL, title='', subtitle="Income Statement: Depreciation expense") +
   scale_y_continuous(breaks=is_labels,
